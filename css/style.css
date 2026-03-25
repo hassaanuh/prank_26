@@ -521,5 +521,16 @@ canvas { display: block; width: 100%; height: auto; }
 }
 .delete-confirm-no:hover { color: var(--text); }
 
+.logo-stack { display: flex; flex-direction: column; gap: 1px; }
+.logo-link {
+  font-size: 11px;
+  font-family: var(--font-mono);
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.2s;
+  line-height: 1;
+}
+.logo-link:hover { color: var(--teal); }
+
 /* ─── UTILS ──────────────────────────────────────── */
 .hidden { display: none !important; }
