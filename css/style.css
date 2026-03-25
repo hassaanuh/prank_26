@@ -485,41 +485,54 @@ canvas { display: block; width: 100%; height: auto; }
 }
 .toast.show { transform: translateX(-50%) translateY(0); }
 
-/* ─── DELETE ─────────────────────────────────────── */
-.delete-btn {
-  background: none; border: none;
-  font-size: 15px; cursor: pointer;
-  padding: 2px 5px; border-radius: 6px;
-  opacity: 0.4; transition: opacity 0.2s; line-height: 1;
-}
-.delete-btn:hover { opacity: 1; }
-
-.delete-confirm {
+/* ─── TEXT DRAG / RESIZE HANDLES ────────────────── */
+.handle-layer {
   position: absolute; inset: 0;
-  background: rgba(14,14,22,0.93);
-  backdrop-filter: blur(4px);
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  gap: 10px; padding: 20px; border-radius: 14px;
-  animation: popIn 0.2s cubic-bezier(0.34,1.56,0.64,1);
-  z-index: 10;
+  pointer-events: none;
+  z-index: 20;
 }
-.delete-confirm span { font-weight: 800; font-size: 15px; }
-.delete-confirm-yes {
-  background: var(--red); color: #fff; border: none;
-  border-radius: 8px; padding: 9px 18px;
-  font-family: var(--font-body); font-weight: 800;
-  font-size: 13px; cursor: pointer; width: 100%;
-  box-shadow: 0 4px 16px rgba(230,57,70,0.35);
+
+.text-handle-box {
+  position: absolute;
+  pointer-events: all;
+  cursor: grab;
+  border: 1.5px dashed rgba(255,255,255,0.25);
+  border-radius: 4px;
+  transition: border-color 0.15s;
+  box-sizing: border-box;
 }
-.delete-confirm-yes:hover { background: #ff4d5a; }
-.delete-confirm-no {
-  background: transparent; color: var(--muted);
-  border: 1.5px solid var(--border); border-radius: 8px;
-  padding: 8px 18px; font-family: var(--font-body);
-  font-weight: 700; font-size: 13px; cursor: pointer; width: 100%;
+.text-handle-box:hover {
+  border-color: rgba(255,214,10,0.6);
 }
-.delete-confirm-no:hover { color: var(--text); }
+.text-handle-box.active {
+  border-color: var(--yellow);
+  box-shadow: 0 0 0 1px rgba(255,214,10,0.2);
+}
+
+/* Corner resize handles */
+.resize-handle {
+  position: absolute;
+  width: 10px; height: 10px;
+  background: var(--yellow);
+  border: 2px solid var(--dark);
+  border-radius: 2px;
+  pointer-events: all;
+  z-index: 21;
+}
+.resize-nw { top: -5px;    left: -5px;    cursor: nw-resize; }
+.resize-ne { top: -5px;    right: -5px;   cursor: ne-resize; }
+.resize-sw { bottom: -5px; left: -5px;    cursor: sw-resize; }
+.resize-se { bottom: -5px; right: -5px;   cursor: se-resize; }
+
+/* Hide handles when box has no active class (dim on inactive) */
+.text-handle-box:not(.active) .resize-handle {
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.text-handle-box:hover .resize-handle,
+.text-handle-box.active .resize-handle {
+  opacity: 1;
+}
 
 /* ─── UTILS ──────────────────────────────────────── */
 .hidden { display: none !important; }
