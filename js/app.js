@@ -1,6 +1,6 @@
 // ============================================================
 //  GIVINGTUESDAY MEME LAB v2 — app.js
-//  Anonymous auth · free-drag text · corner resize
+//  Anonymous auth · free-drag text · corner resize · export fix
 // ============================================================
 
 import { auth, db, storage } from "./firebase-config.js";
@@ -113,8 +113,6 @@ document.getElementById("randomNameBtn").addEventListener("click", () => {
 });
 
 // ─── STATE ────────────────────────────────────────────────
-// x/y are 0–1 fractions of canvas size (center of text block).
-// fontSize is stored per-layer so each layer can be independently sized.
 const state = {
   image: null,
   textLayers: [
@@ -141,7 +139,6 @@ const canvasWrap   = document.getElementById("canvasWrap");
 function drawMeme() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // Background image or gradient placeholder
   if (state.image) {
     document.getElementById("canvasHint").classList.add("hidden");
     const { width: iw, height: ih } = state.image;
@@ -157,7 +154,6 @@ function drawMeme() {
 
   drawOverlay();
 
-  // Static text drawn to canvas; animated text uses DOM overlay
   if (state.textAnimation === "none") {
     animLayer.innerHTML = "";
     state.textLayers.forEach(l => { if (l.text.trim()) drawLayerText(l); });
@@ -165,24 +161,57 @@ function drawMeme() {
     renderAnimDOM();
   }
 
-  // Always re-render the drag/resize handle boxes
   renderHandles();
+}
+
+// ─── CAPTURE-SAFE EXPORT ──────────────────────────────────
+// Always bakes text onto the canvas regardless of animation mode,
+// then restores the live state after capturing.
+function captureCanvas() {
+  const savedAnim = state.textAnimation;
+  state.textAnimation = "none";
+  animLayer.innerHTML = "";
+  hideHandles();
+
+  // Full redraw with everything on canvas
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  if (state.image) {
+    const { width: iw, height: ih } = state.image;
+    const cw = canvas.width, ch = canvas.height;
+    const scale = Math.max(cw / iw, ch / ih);
+    ctx.drawImage(state.image, (cw - iw * scale) / 2, (ch - ih * scale) / 2, iw * scale, ih * scale);
+  } else {
+    const g = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+    g.addColorStop(0, "#1a1a2e"); g.addColorStop(1, "#16213e");
+    ctx.fillStyle = g; ctx.fillRect(0, 0, canvas.width, canvas.height);
+  }
+  drawOverlay();
+  state.textLayers.forEach(l => { if (l.text.trim()) drawLayerText(l); });
+
+  const dataUrl = canvas.toDataURL("image/png");
+
+  // Restore live state
+  state.textAnimation = savedAnim;
+  showHandles();
+  drawMeme();
+
+  return dataUrl;
 }
 
 // ─── CANVAS TEXT RENDERING ────────────────────────────────
 function drawLayerText(layer) {
   const size = layer.fontSize;
-  ctx.font        = `900 ${size}px ${state.activeFontFamily}, Impact`;
-  ctx.textAlign   = "center";
+  ctx.font         = `900 ${size}px ${state.activeFontFamily}, Impact`;
+  ctx.textAlign    = "center";
   ctx.textBaseline = "middle";
-  ctx.lineJoin    = "round";
+  ctx.lineJoin     = "round";
 
-  const maxW  = canvas.width - 40;
-  const lines = wrapText(layer.text.toUpperCase(), maxW, size);
-  const lineH = size * 1.2;
+  const maxW   = canvas.width - 40;
+  const lines  = wrapText(layer.text.toUpperCase(), maxW, size);
+  const lineH  = size * 1.2;
   const totalH = lines.length * lineH;
-  const cx = layer.x * canvas.width;
-  const cy = layer.y * canvas.height;
+  const cx     = layer.x * canvas.width;
+  const cy     = layer.y * canvas.height;
 
   lines.forEach((line, i) => {
     const y = cy - totalH / 2 + lineH * i + lineH / 2;
@@ -216,7 +245,7 @@ function renderAnimDOM() {
   const scaleY = canvas.offsetHeight / canvas.height;
   state.textLayers.forEach((l, i) => {
     if (!l.text.trim()) return;
-    const el  = document.createElement("div");
+    const el = document.createElement("div");
     el.className = `anim-text-el anim-${state.textAnimation}`;
     const size = Math.round(l.fontSize * scaleY);
     el.style.cssText = `
@@ -241,9 +270,6 @@ function renderAnimDOM() {
 }
 
 // ─── DRAG + RESIZE HANDLE OVERLAY ────────────────────────
-// The handle layer is a transparent DOM div covering the canvas.
-// pointer-events:none on the container, pointer-events:all on each box
-// so clicks on empty canvas areas pass through to the canvas itself.
 let handleLayer = null;
 
 function getHandleLayer() {
@@ -254,18 +280,19 @@ function getHandleLayer() {
   return handleLayer;
 }
 
+function hideHandles() { if (handleLayer) handleLayer.style.display = "none"; }
+function showHandles() { if (handleLayer) handleLayer.style.display = ""; }
+
 function renderHandles() {
-  const layer = getHandleLayer();
+  const layer  = getHandleLayer();
   layer.innerHTML = "";
 
-  // Scale factors: canvas coords → displayed pixel coords
   const scaleX = canvas.offsetWidth  / canvas.width;
   const scaleY = canvas.offsetHeight / canvas.height;
 
   state.textLayers.forEach((tl, i) => {
     if (!tl.text.trim()) return;
 
-    // Measure text in canvas-space pixels
     const size  = tl.fontSize;
     ctx.font    = `900 ${size}px ${state.activeFontFamily}, Impact`;
     const maxW  = canvas.width - 40;
@@ -274,28 +301,23 @@ function renderHandles() {
     const rawW  = Math.min(maxW, Math.max(...lines.map(ln => ctx.measureText(ln).width)));
     const rawH  = lines.length * lineH;
 
-    // Convert to % of displayed canvas wrapper
-    const boxW = (rawW  * scaleX / canvas.offsetWidth)  * 100;
-    const boxH = (rawH  * scaleY / canvas.offsetHeight) * 100;
-    const boxL = tl.x * 100;
-    const boxT = tl.y * 100;
+    const boxW = (rawW * scaleX / canvas.offsetWidth)  * 100;
+    const boxH = (rawH * scaleY / canvas.offsetHeight) * 100;
 
     const isActive = i === state.activeLayerIndex;
 
     const box = document.createElement("div");
     box.className = "text-handle-box" + (isActive ? " active" : "");
     box.style.cssText = `
-      left: ${boxL}%;
-      top: ${boxT}%;
+      left: ${tl.x * 100}%;
+      top: ${tl.y * 100}%;
       width: ${boxW}%;
       height: ${boxH}%;
       transform: translate(-50%, -50%);
     `;
 
-    // Drag the whole box to reposition text
     attachDrag(box, i);
 
-    // Four corner handles for resizing
     ["nw", "ne", "sw", "se"].forEach(corner => {
       const h = document.createElement("div");
       h.className = `resize-handle resize-${corner}`;
@@ -336,10 +358,7 @@ function attachDrag(box, layerIndex) {
     drawMeme();
   });
 
-  box.addEventListener("pointerup", e => {
-    dragging = false;
-  });
-
+  box.addEventListener("pointerup",     () => { dragging = false; });
   box.addEventListener("pointercancel", () => { dragging = false; });
 }
 
@@ -365,18 +384,13 @@ function attachResize(handle, layerIndex, corner) {
     const rect = canvasWrap.getBoundingClientRect();
     const dx = (e.clientX - startClientX) / rect.width;
     const dy = (e.clientY - startClientY) / rect.height;
-    // Direction: dragging right/down = bigger, left/up = smaller
-    // Adjust sign based on which corner
     let delta;
     if      (corner === "se") delta =  dx - dy;
     else if (corner === "sw") delta = -dx - dy;
     else if (corner === "ne") delta =  dx + dy;
-    else                      delta = -dx + dy; // nw
-
+    else                      delta = -dx + dy;
     const newSize = Math.max(12, Math.min(120, Math.round(startSize + delta * 300)));
     state.textLayers[layerIndex].fontSize = newSize;
-
-    // Keep sidebar slider in sync for active layer
     if (layerIndex === state.activeLayerIndex) {
       document.getElementById("activeFontSize").value = newSize;
       document.getElementById("fontSizeVal").textContent = newSize;
@@ -384,7 +398,7 @@ function attachResize(handle, layerIndex, corner) {
     drawMeme();
   });
 
-  handle.addEventListener("pointerup", () => { resizing = false; });
+  handle.addEventListener("pointerup",     () => { resizing = false; });
   handle.addEventListener("pointercancel", () => { resizing = false; });
 }
 
@@ -396,13 +410,11 @@ function selectLayer(i) {
     document.getElementById("activeFontSize").value = layer.fontSize;
     document.getElementById("fontSizeVal").textContent = layer.fontSize;
   }
-  // Highlight active input in sidebar
   document.querySelectorAll(".text-layer-row input").forEach((el, idx) => {
     el.classList.toggle("layer-active", idx === i);
   });
 }
 
-// Clicking the raw canvas (not a handle box) deselects
 canvas.addEventListener("pointerdown", () => {
   state.activeLayerIndex = -1;
   drawMeme();
@@ -586,20 +598,13 @@ function buildEmojiPalette() {
   });
 }
 
-// ─── EXPORT HELPERS ───────────────────────────────────────
-// Hide the handle overlay before capturing canvas, restore after
-function hideHandles() { if (handleLayer) handleLayer.style.display = "none"; }
-function showHandles() { if (handleLayer) handleLayer.style.display = ""; }
-
 // ─── SAVE TO GALLERY ──────────────────────────────────────
 document.getElementById("saveBtn").addEventListener("click", async () => {
   if (!state.image) { showToast("Add an image first 👀"); return; }
   if (!currentUID)  { showToast("Connecting... try again!"); return; }
   try {
     showToast("🌍 Posting to gallery...");
-    hideHandles();
-    const dataUrl = canvas.toDataURL("image/jpeg", 0.85);
-    showHandles();
+    const dataUrl = captureCanvas();
     const storageRef = ref(storage, `memes/${currentUID}/${Date.now()}.jpg`);
     await uploadString(storageRef, dataUrl, "data_url");
     const imageUrl = await getDownloadURL(storageRef);
@@ -744,20 +749,20 @@ document.querySelectorAll(".filter-btn").forEach(btn => {
 
 // ─── DOWNLOAD / COPY / SHARE ──────────────────────────────
 document.getElementById("downloadBtn").addEventListener("click", () => {
-  hideHandles();
+  const dataUrl = captureCanvas();
   const a = document.createElement("a"); a.download = "givingtuesday-meme.png";
-  a.href = canvas.toDataURL("image/png"); a.click();
-  showHandles(); showToast("⬇ Downloading!");
+  a.href = dataUrl; a.click();
+  showToast("⬇ Downloading!");
 });
 
 document.getElementById("copyBtn").addEventListener("click", async () => {
-  hideHandles();
+  const dataUrl = captureCanvas();
   try {
-    canvas.toBlob(async blob => {
-      await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
-      showHandles(); showToast("📋 Copied to clipboard!");
-    });
-  } catch { showHandles(); showToast("⬇ Use download instead!"); }
+    const res = await fetch(dataUrl);
+    const blob = await res.blob();
+    await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
+    showToast("📋 Copied to clipboard!");
+  } catch { showToast("⬇ Use download instead!"); }
 });
 
 document.getElementById("twitterBtn").addEventListener("click", () => {
@@ -768,10 +773,10 @@ document.getElementById("facebookBtn").addEventListener("click", () => {
   window.open("https://www.facebook.com/sharer/sharer.php?u=https://www.givingtuesday.org", "_blank");
 });
 document.getElementById("igBtn").addEventListener("click", () => {
-  hideHandles();
+  const dataUrl = captureCanvas();
   const a = document.createElement("a"); a.download = "gt-meme-ig.png";
-  a.href = canvas.toDataURL("image/png"); a.click();
-  showHandles(); showToast("📸 Saved! Upload to Instagram");
+  a.href = dataUrl; a.click();
+  showToast("📸 Saved! Upload to Instagram");
 });
 
 // ─── CONTROL BINDINGS ─────────────────────────────────────
@@ -813,22 +818,17 @@ document.getElementById("addTextBtn").addEventListener("click", () => {
 document.getElementById("activeFontFamily").addEventListener("change", e => {
   state.activeFontFamily = e.target.value; drawMeme();
 });
-
 document.getElementById("activeFontSize").addEventListener("input", e => {
   const size = +e.target.value;
   document.getElementById("fontSizeVal").textContent = size;
-  if (state.textLayers[state.activeLayerIndex]) {
-    state.textLayers[state.activeLayerIndex].fontSize = size;
-  }
+  if (state.textLayers[state.activeLayerIndex]) state.textLayers[state.activeLayerIndex].fontSize = size;
   drawMeme();
 });
-
 document.getElementById("activeOutline").addEventListener("input", e => {
   state.activeOutline = e.target.value;
   document.getElementById("outlineVal").textContent = e.target.value;
   drawMeme();
 });
-
 document.querySelectorAll("[data-tc]").forEach(el => {
   el.addEventListener("click", () => {
     document.querySelectorAll("[data-tc]").forEach(e => e.classList.remove("active"));
@@ -913,4 +913,4 @@ buildEmojiPalette();
 buildSnarkGrid();
 drawMeme();
 
-console.log("❤️ GivingTuesday Meme Lab v2 — drag text edition. Let's go.");
+console.log("❤️ GivingTuesday Meme Lab v2 — export fix edition. Let's go.");
