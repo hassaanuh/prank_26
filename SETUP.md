@@ -1,54 +1,55 @@
-# 🚀 GivingTuesday Meme Lab — Setup Guide
+# 🚀 GivingTuesday Meme Lab v2 — Setup Guide
+## Anonymous Edition · No email · No passwords · Just vibes
+
+---
 
 ## Step 1 — Create a Firebase Project (free)
 
 1. Go to **https://console.firebase.google.com**
 2. Click **"Add project"** → Name it `givingtuesday-memelab` → Continue
-3. Disable Google Analytics if you want (optional) → **Create project**
+3. Disable Google Analytics if you want → **Create project**
 
 ---
 
-## Step 2 — Enable Authentication
+## Step 2 — Enable Anonymous Authentication
 
-1. In Firebase Console → left sidebar → **Build → Authentication**
-2. Click **"Get started"**
-3. Enable **Email/Password** (Sign-in providers tab → Email/Password → Enable → Save)
-4. Also enable **Google** (click Google → Enable → add your support email → Save)
+1. Left sidebar → **Build → Authentication → Get started**
+2. Click the **"Sign-in method"** tab
+3. Click **"Anonymous"** → toggle **Enable** → **Save**
+
+That's it. No email providers needed.
 
 ---
 
 ## Step 3 — Create Firestore Database
 
-1. Left sidebar → **Build → Firestore Database**
-2. Click **"Create database"**
-3. Choose **"Start in test mode"** (we'll tighten rules later)
-4. Pick a region close to you → **Enable**
+1. Left sidebar → **Build → Firestore Database → Create database**
+2. Choose **"Start in test mode"** → pick a region → **Enable**
 
 ---
 
 ## Step 4 — Enable Storage
 
-1. Left sidebar → **Build → Storage**
-2. Click **"Get started"** → Start in test mode → **Done**
+1. Left sidebar → **Build → Storage → Get started**
+2. Start in test mode → **Done**
 
 ---
 
-## Step 5 — Get Your Config Keys
+## Step 5 — Get Your Config
 
-1. Go to **Project Settings** (gear icon, top left)
-2. Scroll to **"Your apps"** → click **"</>** (Web)" icon
-3. Register your app with any nickname → **Register app**
-4. Copy the `firebaseConfig` object shown
+1. **Project Settings** (gear icon) → scroll to **"Your apps"**
+2. Click **"</>"** (Web) → register with any nickname → **Register app**
+3. Copy the `firebaseConfig` object
 
 ---
 
-## Step 6 — Paste Config into the App
+## Step 6 — Paste Into the App
 
-Open `js/firebase-config.js` and replace the placeholder object:
+Open `js/firebase-config.js` and replace:
 
 ```js
 const firebaseConfig = {
-  apiKey:            "AIza...",          // ← your key
+  apiKey:            "AIza...",
   authDomain:        "your-project.firebaseapp.com",
   projectId:         "your-project-id",
   storageBucket:     "your-project.appspot.com",
@@ -59,9 +60,9 @@ const firebaseConfig = {
 
 ---
 
-## Step 7 — Set Firestore Security Rules (recommended)
+## Step 7 — Firestore Security Rules
 
-In Firebase Console → Firestore → **Rules** tab, paste:
+Firestore → **Rules** tab → paste and **Publish**:
 
 ```
 rules_version = '2';
@@ -81,52 +82,58 @@ service cloud.firestore {
 }
 ```
 
-Click **Publish**.
+---
+
+## Step 8 — Storage Rules
+
+Storage → **Rules** tab → paste and **Publish**:
+
+```
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /memes/{userId}/{allPaths=**} {
+      allow read: if true;
+      allow write: if request.auth != null && request.auth.uid == userId;
+    }
+  }
+}
+```
 
 ---
 
-## Step 8 — Deploy to GitHub Pages
+## Step 9 — Deploy to GitHub Pages
 
-1. Create a new **public** GitHub repo (e.g. `givingtuesday-memelab`)
-2. Upload all files keeping the folder structure:
-   ```
-   index.html
-   css/style.css
-   js/firebase-config.js
-   js/app.js
-   SETUP.md
-   ```
-3. Go to repo **Settings → Pages**
-4. Source: **Deploy from branch** → branch: `main` → folder: `/ (root)`
-5. Save → wait ~1 min → your site is live at:
-   `https://yourusername.github.io/givingtuesday-memelab`
+Upload all files to your GitHub repo keeping this structure:
+```
+index.html
+css/style.css
+js/app.js
+js/firebase-config.js
+SETUP.md
+```
 
----
+Go to **Settings → Pages → Deploy from branch → main → / (root) → Save**
 
-## Step 9 — Add Your Domain to Firebase Auth
-
-So Google/Email login works on your GitHub Pages URL:
-
-1. Firebase Console → Authentication → **Settings tab**
-2. Scroll to **"Authorized domains"** → **Add domain**
-3. Add: `yourusername.github.io`
+Your site will be live at: `https://yourusername.github.io/your-repo-name`
 
 ---
 
-## 🎉 You're live!
+## How anonymous auth works
 
-Your meme generator now has:
-- ✅ Email + Google login
-- ✅ Saved memes gallery (Firestore + Storage)
-- ✅ Like system
-- ✅ Leaderboard
-- ✅ Username stamps on memes
-- ✅ Moving text, emoji stickers, overlays, snarky starters
+- When someone visits, Firebase silently creates an anonymous session
+- A random fun name (e.g. `GenerousOtter142`) is generated and saved in their browser
+- They can rename themselves anytime — name is stored in `localStorage` + Firestore
+- Their anonymous UID persists as long as they use the same browser
+- No email, no password, no friction
 
 ---
 
-## Firestore free tier limits (plenty for a nonprofit!)
-- **1 GB storage** (Storage)
-- **10 GB/month** transfer
-- **50,000 reads/day**, **20,000 writes/day**
-- Well beyond what you'll need to start
+## Free tier limits (more than enough)
+| Feature | Free limit |
+|---|---|
+| Firestore reads | 50,000 / day |
+| Firestore writes | 20,000 / day |
+| Storage | 1 GB total |
+| Bandwidth | 10 GB / month |
+| Anonymous auth sessions | Unlimited |

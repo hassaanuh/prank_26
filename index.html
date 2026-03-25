@@ -15,40 +15,50 @@
     <div class="logo">
       <span class="logo-heart">❤️</span>
       <span class="logo-text">GivingTuesday <em>Meme Lab</em></span>
-      <span class="logo-tag">est. because someone had to</span>
+      <span class="logo-tag">no signup required, bestie</span>
     </div>
     <nav class="header-nav">
       <button class="nav-btn active" data-page="create">✏️ Create</button>
       <button class="nav-btn" data-page="gallery">🖼️ Gallery</button>
       <button class="nav-btn" data-page="leaderboard">🏆 Board</button>
     </nav>
-    <div class="auth-zone">
-      <div id="authSignedOut" class="auth-signed-out">
-        <button class="btn-ghost" id="loginBtn">Log in</button>
-        <button class="btn-red" id="signupBtn">Join free</button>
-      </div>
-      <div id="authSignedIn" class="auth-signed-in hidden">
-        <span class="user-avatar" id="userAvatar">?</span>
-        <span class="user-name" id="userName"></span>
-        <button class="btn-ghost" id="logoutBtn">Out</button>
+    <!-- Identity strip — always visible, no login needed -->
+    <div class="identity-strip">
+      <div class="identity-inner">
+        <span class="identity-label">You are:</span>
+        <span class="identity-name" id="displayNameBadge" title="Click to edit">GenerousOtter42</span>
+        <button class="identity-edit-btn" id="editNameBtn" title="Change your name">✏️</button>
       </div>
     </div>
   </div>
 </header>
 
-<!-- ░░ TAGLINE TICKER ░░ -->
+<!-- ░░ NICKNAME EDIT POPOVER ░░ -->
+<div class="name-popover hidden" id="namePopover">
+  <div class="name-popover-inner">
+    <p class="popover-title">Your display name</p>
+    <p class="popover-sub">Shows up on your memes & the leaderboard. Still anonymous — no email, ever.</p>
+    <div class="popover-row">
+      <input type="text" id="nameInput" class="popover-input" maxlength="24" placeholder="e.g. GenerousOtter42">
+      <button class="btn-red" id="saveNameBtn">Save</button>
+    </div>
+    <button class="popover-random-btn" id="randomNameBtn">🎲 Give me a random one</button>
+  </div>
+</div>
+
+<!-- ░░ TICKER ░░ -->
 <div class="ticker-wrap">
   <div class="ticker">
-    <span>Save the world one meme at a time 🌍</span>
-    <span>Tax-deductible content 📝</span>
-    <span>More effective than a newsletter nobody reads 📧</span>
-    <span>Your nonprofit needs this. Trust. ✨</span>
-    <span>Making generosity go viral since right now 🚀</span>
+    <span>No email required. No excuses either. 👀</span>
+    <span>Saving the world, anonymously 🕵️</span>
+    <span>More viral than a newsletter nobody reads 📧</span>
+    <span>Your donors are online. Just saying. 🌍</span>
+    <span>Making generosity look good since right now ✨</span>
+    <span>Tax-deductible vibes only 📝</span>
     <span>The ROI on love is immeasurable 💸</span>
-    <span>Your donors are on the internet. Just saying. 👀</span>
-    <span>Save the world one meme at a time 🌍</span>
-    <span>Tax-deductible content 📝</span>
-    <span>More effective than a newsletter nobody reads 📧</span>
+    <span>No email required. No excuses either. 👀</span>
+    <span>Saving the world, anonymously 🕵️</span>
+    <span>More viral than a newsletter nobody reads 📧</span>
   </div>
 </div>
 
@@ -62,7 +72,6 @@
       <!-- LEFT: Controls -->
       <div class="controls-col">
 
-        <!-- Image Source -->
         <section class="ctrl-section">
           <h2 class="section-head">📸 Image Source</h2>
           <div class="upload-zone" id="uploadZone">
@@ -76,10 +85,8 @@
           <div class="template-shelf" id="templateShelf"></div>
         </section>
 
-        <!-- Text Controls -->
         <section class="ctrl-section">
           <h2 class="section-head">✍️ Text</h2>
-
           <div id="textLayers"></div>
           <button class="btn-outline btn-sm" id="addTextBtn">+ Add Text Layer</button>
 
@@ -92,7 +99,7 @@
                 <option value="'Syne'">Syne</option>
                 <option value="'Syne Mono'">Syne Mono</option>
                 <option value="'Comic Sans MS'">Comic Sans 😌</option>
-                <option value="'Georgia'">Georgia</option>
+                <option value="Georgia">Georgia</option>
               </select>
             </div>
             <div>
@@ -128,7 +135,6 @@
             </div>
           </div>
 
-          <!-- Animation -->
           <label style="margin-top:12px;">Text Animation</label>
           <div class="anim-grid">
             <div class="anim-opt active" data-anim="none">Static</div>
@@ -140,7 +146,6 @@
           </div>
         </section>
 
-        <!-- Emoji Stickers -->
         <section class="ctrl-section">
           <h2 class="section-head">🎨 Emoji Stickers</h2>
           <p class="section-sub">Click to add · Drag on canvas to reposition</p>
@@ -148,7 +153,6 @@
           <button class="btn-outline btn-sm" id="clearStickersBtn" style="margin-top:8px;">🗑 Clear stickers</button>
         </section>
 
-        <!-- Overlay & Branding -->
         <section class="ctrl-section">
           <h2 class="section-head">🏷️ Overlay</h2>
           <div class="overlay-grid">
@@ -162,7 +166,6 @@
           <input type="text" id="hashtagInput" class="ctrl-input" value="#GivingTuesday">
         </section>
 
-        <!-- Snarky Templates -->
         <section class="ctrl-section">
           <h2 class="section-head">😏 Snarky Starters</h2>
           <p class="section-sub">One-click inspo. You're welcome.</p>
@@ -171,14 +174,12 @@
 
       </div>
 
-      <!-- RIGHT: Canvas + actions -->
+      <!-- RIGHT: Canvas -->
       <div class="preview-col">
-        <div class="canvas-card" id="canvasCard">
+        <div class="canvas-card">
           <div class="canvas-wrap" id="canvasWrap">
             <canvas id="memeCanvas" width="600" height="600"></canvas>
-            <!-- Emoji sticker overlay (drag layer) -->
             <div class="sticker-layer" id="stickerLayer"></div>
-            <!-- Animated text overlay -->
             <div class="anim-text-layer" id="animTextLayer"></div>
           </div>
           <div class="canvas-hint" id="canvasHint">Select an image or template to get cooking 🍳</div>
@@ -187,16 +188,15 @@
         <div class="action-row">
           <button class="btn-red btn-lg" id="downloadBtn">⬇ Download</button>
           <button class="btn-ghost btn-lg" id="copyBtn">📋 Copy</button>
-          <button class="btn-teal btn-lg" id="saveBtn">💾 Save Meme</button>
+          <button class="btn-teal btn-lg" id="saveBtn">🌍 Post to Gallery</button>
         </div>
         <div class="share-row">
           <button class="share-btn tw" id="twitterBtn">𝕏 Share</button>
           <button class="share-btn fb" id="facebookBtn">f Share</button>
           <button class="share-btn ig" id="igBtn">📸 Instagram</button>
         </div>
-
         <div class="snark-footer">
-          <p>"Every great social movement started with a meme. Probably." — Someone, 2024</p>
+          <p>"Every great movement started with a meme. Probably." — Someone, 2024</p>
         </div>
       </div>
 
@@ -212,11 +212,11 @@
     <div class="gallery-filters">
       <button class="filter-btn active" data-filter="all">All Memes</button>
       <button class="filter-btn" data-filter="mine">Mine</button>
-      <button class="filter-btn" data-filter="top">Most Loved</button>
+      <button class="filter-btn" data-filter="top">Most Loved ❤️</button>
     </div>
     <div class="gallery-grid" id="galleryGrid">
       <div class="gallery-empty">
-        <p>👀 No memes yet. Be the change you wish to see.</p>
+        <p>👀 Nothing here yet. Be the change you wish to see.</p>
         <button class="btn-red" onclick="showPage('create')">Make one now</button>
       </div>
     </div>
@@ -225,47 +225,21 @@
   <!-- LEADERBOARD PAGE -->
   <div id="page-leaderboard" class="page hidden">
     <div class="page-header">
-      <h1 class="page-title">🏆 Leaderboard</h1>
-      <p class="page-sub">Who's spreading joy the hardest? Science demands to know.</p>
+      <h1 class="page-title">🏆 Hall of Generosity</h1>
+      <p class="page-sub">Ranked by ❤️ likes received. Anonymous legends, all of them.</p>
     </div>
     <div class="leaderboard-wrap">
       <div class="leaderboard-table" id="leaderboardTable">
-        <div class="lb-loading">Loading the hall of fame...</div>
+        <div class="lb-loading">Counting hearts...</div>
       </div>
     </div>
   </div>
 
 </main>
 
-<!-- ░░ AUTH MODAL ░░ -->
-<div class="modal-backdrop hidden" id="authModal">
-  <div class="modal">
-    <button class="modal-close" id="closeModal">✕</button>
-    <div class="modal-logo">❤️</div>
-    <h2 class="modal-title" id="modalTitle">Welcome back, hero.</h2>
-    <p class="modal-sub" id="modalSub">Log in to save memes, flex on the leaderboard, and stamp your name on greatness.</p>
-
-    <div id="authError" class="auth-error hidden"></div>
-
-    <input type="text" id="authUsername" class="modal-input" placeholder="Username (displayed on memes)" style="display:none;">
-    <input type="email" id="authEmail" class="modal-input" placeholder="your@email.com">
-    <input type="password" id="authPassword" class="modal-input" placeholder="Password (make it a good one)">
-
-    <button class="btn-red btn-full" id="authSubmitBtn">Let's go →</button>
-    <button class="btn-ghost btn-full" id="authSwitchBtn">Don't have an account? Join free.</button>
-
-    <div class="modal-divider"><span>or</span></div>
-    <button class="btn-google btn-full" id="googleAuthBtn">
-      <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 000 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.958L3.964 6.29C4.672 4.163 6.656 3.58 9 3.58z"/></svg>
-      Continue with Google
-    </button>
-  </div>
-</div>
-
 <!-- ░░ TOAST ░░ -->
 <div class="toast" id="toast"></div>
 
-<!-- Firebase SDK -->
 <script type="module" src="js/firebase-config.js"></script>
 <script type="module" src="js/app.js"></script>
 </body>
