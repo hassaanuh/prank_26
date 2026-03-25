@@ -49,13 +49,9 @@ body::before {
 }
 
 .header-inner {
-  max-width: 1300px;
-  margin: 0 auto;
-  padding: 0 24px;
-  height: 60px;
-  display: flex;
-  align-items: center;
-  gap: 20px;
+  max-width: 1300px; margin: 0 auto;
+  padding: 0 24px; height: 60px;
+  display: flex; align-items: center; gap: 20px;
 }
 
 .logo { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
@@ -75,10 +71,7 @@ body::before {
 .nav-btn.active { color: var(--yellow); background: rgba(255,214,10,0.1); }
 
 /* Identity strip */
-.identity-strip {
-  flex-shrink: 0;
-  position: relative;
-}
+.identity-strip { flex-shrink: 0; position: relative; }
 .identity-inner {
   display: flex; align-items: center; gap: 6px;
   background: rgba(255,255,255,0.06);
@@ -88,66 +81,43 @@ body::before {
 }
 .identity-label { font-size: 11px; color: var(--muted); font-weight: 700; white-space: nowrap; }
 .identity-name {
-  font-size: 13px; font-weight: 800;
-  color: var(--yellow);
-  max-width: 140px;
-  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  font-size: 13px; font-weight: 800; color: var(--yellow);
+  max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
   cursor: pointer;
 }
 .identity-edit-btn {
   background: none; border: none; font-size: 12px;
-  cursor: pointer; padding: 0 2px; opacity: 0.5;
-  transition: opacity 0.2s; line-height: 1;
+  cursor: pointer; padding: 0 2px; opacity: 0.5; transition: opacity 0.2s; line-height: 1;
 }
 .identity-edit-btn:hover { opacity: 1; }
 
 /* Name popover */
 .name-popover {
-  position: absolute;
-  top: calc(100% + 8px);
-  right: 0;
-  width: 300px;
-  background: var(--card);
-  border: 1px solid rgba(255,255,255,0.14);
-  border-radius: 14px;
-  padding: 18px;
-  box-shadow: 0 16px 48px rgba(0,0,0,0.5);
-  z-index: 200;
+  position: absolute; top: calc(100% + 8px); right: 0; width: 300px;
+  background: var(--card); border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 14px; padding: 18px;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.5); z-index: 200;
   animation: popIn 0.2s cubic-bezier(0.34,1.56,0.64,1);
 }
-@keyframes popIn { from { opacity:0; transform: scale(0.92) translateY(-4px); } to { opacity:1; transform: scale(1) translateY(0); } }
-
+@keyframes popIn {
+  from { opacity:0; transform: scale(0.92) translateY(-4px); }
+  to   { opacity:1; transform: scale(1) translateY(0); }
+}
 .name-popover.hidden { display: none; }
 .popover-title { font-family: var(--font-display); font-size: 18px; letter-spacing: 1px; color: var(--yellow); margin-bottom: 4px; }
 .popover-sub { font-size: 12px; color: var(--muted); line-height: 1.5; margin-bottom: 12px; }
 .popover-row { display: flex; gap: 8px; }
 .popover-input {
-  flex: 1;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  color: var(--text);
-  font-family: var(--font-body);
-  font-size: 14px;
-  font-weight: 700;
-  padding: 9px 12px;
-  outline: none;
-  transition: border-color 0.2s;
+  flex: 1; background: rgba(255,255,255,0.06); border: 1px solid var(--border);
+  border-radius: 8px; color: var(--text); font-family: var(--font-body);
+  font-size: 14px; font-weight: 700; padding: 9px 12px; outline: none; transition: border-color 0.2s;
 }
 .popover-input:focus { border-color: var(--yellow); }
 .popover-random-btn {
-  width: 100%;
-  margin-top: 8px;
-  background: rgba(255,255,255,0.04);
-  border: 1.5px dashed rgba(255,255,255,0.15);
-  border-radius: 8px;
-  color: var(--muted);
-  font-family: var(--font-body);
-  font-weight: 700;
-  font-size: 13px;
-  padding: 9px;
-  cursor: pointer;
-  transition: all 0.2s;
+  width: 100%; margin-top: 8px; background: rgba(255,255,255,0.04);
+  border: 1.5px dashed rgba(255,255,255,0.15); border-radius: 8px;
+  color: var(--muted); font-family: var(--font-body); font-weight: 700; font-size: 13px;
+  padding: 9px; cursor: pointer; transition: all 0.2s;
 }
 .popover-random-btn:hover { border-color: var(--yellow); color: var(--yellow); background: rgba(255,214,10,0.06); }
 
@@ -174,9 +144,8 @@ body::before {
 .btn-red.btn-full { width: 100%; padding: 13px; font-size: 15px; border-radius: 12px; margin-top: 10px; }
 
 .btn-ghost {
-  background: transparent; color: var(--text);
-  border: 1.5px solid var(--border); border-radius: 10px;
-  font-family: var(--font-body); font-weight: 700; font-size: 13px;
+  background: transparent; color: var(--text); border: 1.5px solid var(--border);
+  border-radius: 10px; font-family: var(--font-body); font-weight: 700; font-size: 13px;
   padding: 9px 18px; cursor: pointer; transition: all 0.2s;
 }
 .btn-ghost:hover { border-color: rgba(255,255,255,0.25); background: rgba(255,255,255,0.06); }
@@ -192,9 +161,8 @@ body::before {
 .btn-teal.btn-lg { font-size: 14px; padding: 13px 24px; border-radius: 12px; }
 
 .btn-outline {
-  background: transparent; color: var(--text);
-  border: 1.5px solid var(--border); border-radius: 8px;
-  font-family: var(--font-body); font-weight: 700;
+  background: transparent; color: var(--text); border: 1.5px solid var(--border);
+  border-radius: 8px; font-family: var(--font-body); font-weight: 700;
   cursor: pointer; transition: all 0.2s;
 }
 .btn-outline:hover { border-color: var(--yellow); color: var(--yellow); }
@@ -224,16 +192,13 @@ main { position: relative; z-index: 10; }
 
 label {
   display: block; font-size: 11px; font-weight: 800;
-  text-transform: uppercase; letter-spacing: 1px;
-  color: var(--muted); margin-bottom: 6px;
+  text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 6px;
 }
 
 .ctrl-input, input[type="text"], input[type="email"], input[type="password"], textarea, select {
-  width: 100%;
-  background: rgba(255,255,255,0.05); border: 1px solid var(--border);
-  border-radius: 8px; color: var(--text);
-  font-family: var(--font-body); font-size: 14px; font-weight: 700;
-  padding: 10px 12px; outline: none; transition: border-color 0.2s;
+  width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+  border-radius: 8px; color: var(--text); font-family: var(--font-body);
+  font-size: 14px; font-weight: 700; padding: 10px 12px; outline: none; transition: border-color 0.2s;
 }
 .ctrl-input:focus, input[type="text"]:focus, input[type="email"]:focus, select:focus { border-color: var(--red); }
 select { cursor: pointer; }
@@ -247,7 +212,6 @@ input[type="range"] { width: 100%; accent-color: var(--red); cursor: pointer; }
 /* ─── TEXT LAYERS ────────────────────────────────── */
 .text-layer-row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
 .text-layer-row input { flex: 1; margin-bottom: 0; padding: 9px 12px; }
-.text-layer-row select { width: 90px; flex-shrink: 0; }
 .text-layer-del {
   background: none; border: none; color: var(--muted);
   font-size: 16px; cursor: pointer; padding: 4px 6px;
@@ -312,8 +276,7 @@ input[type="color"] { width: 26px; height: 26px; border-radius: 50%; border: non
 .emoji-btn {
   font-size: 22px; cursor: pointer; padding: 4px 6px;
   border-radius: 8px; transition: all 0.15s;
-  background: rgba(255,255,255,0.04);
-  border: 1.5px solid transparent; line-height: 1;
+  background: rgba(255,255,255,0.04); border: 1.5px solid transparent; line-height: 1;
 }
 .emoji-btn:hover { background: rgba(255,255,255,0.1); border-color: var(--yellow); transform: scale(1.15); }
 
@@ -340,27 +303,103 @@ input[type="color"] { width: 26px; height: 26px; border-radius: 50%; border: non
 
 /* ─── CANVAS ─────────────────────────────────────── */
 .preview-col { position: sticky; top: 80px; }
+
 .canvas-card {
   background: var(--card); border: 1px solid var(--border);
   border-radius: var(--radius); overflow: hidden; position: relative;
 }
-.canvas-wrap canvas {
-  display: block; width: 100%; height: auto;
-  position: relative; z-index: 1;
+
+/* canvasWrap is the positioning root for all overlay layers */
+.canvas-wrap {
+  position: relative;
+  overflow: hidden;
+  background: #111;
+  user-select: none;
 }
 
-.sticker-layer  { z-index: 2; }
-.anim-text-layer { z-index: 3; }
+/* Canvas sits at the bottom of the stack */
+.canvas-wrap canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  position: relative;
+  z-index: 1;
+}
+
+/* Sticker and anim layers sit above canvas but below handles */
+.sticker-layer {
+  position: absolute; inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
 .sticker-el {
   position: absolute; font-size: 36px; cursor: grab;
   user-select: none; pointer-events: all; line-height: 1;
   filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.5)); transition: transform 0.1s;
+  z-index: 2;
 }
 .sticker-el:hover { transform: scale(1.1); }
 .sticker-el:active { cursor: grabbing; }
-.anim-text-layer { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
-.canvas-hint {
+
+.anim-text-layer {
   position: absolute; inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* Handle layer sits on top of everything — pointer-events none on container,
+   all on the individual boxes so clicks pass through empty areas to canvas */
+.handle-layer {
+  position: absolute; inset: 0;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.text-handle-box {
+  position: absolute;
+  pointer-events: all;
+  cursor: grab;
+  border: 2px dashed rgba(255, 214, 10, 0.5);
+  border-radius: 4px;
+  box-sizing: border-box;
+  transition: border-color 0.15s;
+  touch-action: none;
+}
+.text-handle-box:hover {
+  border-color: rgba(255,214,10,0.9);
+}
+.text-handle-box.active {
+  border-color: var(--yellow);
+  box-shadow: 0 0 0 2px rgba(255,214,10,0.15);
+}
+.text-handle-box:active {
+  cursor: grabbing;
+}
+
+/* Corner resize dots */
+.resize-handle {
+  position: absolute;
+  width: 12px; height: 12px;
+  background: var(--yellow);
+  border: 2px solid var(--dark);
+  border-radius: 3px;
+  pointer-events: all;
+  touch-action: none;
+  z-index: 11;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.text-handle-box:hover  .resize-handle,
+.text-handle-box.active .resize-handle { opacity: 1; }
+
+.resize-nw { top: -6px;    left: -6px;    cursor: nw-resize; }
+.resize-ne { top: -6px;    right: -6px;   cursor: ne-resize; }
+.resize-sw { bottom: -6px; left: -6px;    cursor: sw-resize; }
+.resize-se { bottom: -6px; right: -6px;   cursor: se-resize; }
+
+.canvas-hint {
+  position: absolute; inset: 0; z-index: 5;
   display: flex; align-items: center; justify-content: center;
   text-align: center; font-size: 15px; color: var(--muted);
   padding: 24px; pointer-events: none; transition: opacity 0.3s;
@@ -384,11 +423,27 @@ input[type="color"] { width: 26px; height: 26px; border-radius: 50%; border: non
 .share-btn.ig:hover { background: rgba(225,48,108,0.1); }
 .snark-footer { padding: 12px 16px 16px; text-align: center; font-family: var(--font-mono); font-size: 11px; color: var(--muted); font-style: italic; }
 
+/* ─── ANIM TEXT ──────────────────────────────────── */
+.anim-text-el {
+  position: absolute; font-weight: 900;
+  text-shadow: 3px 3px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
+  pointer-events: none; white-space: nowrap;
+}
+@keyframes textBounce { 0%,100%{transform:translate(-50%,-50%) translateY(0)}    50%{transform:translate(-50%,-50%) translateY(-10px)} }
+@keyframes textShake  { 0%,100%{transform:translate(-50%,-50%) translateX(0)}    20%{transform:translate(-50%,-50%) translateX(-6px)} 40%{transform:translate(-50%,-50%) translateX(6px)} 60%{transform:translate(-50%,-50%) translateX(-4px)} 80%{transform:translate(-50%,-50%) translateX(4px)} }
+@keyframes textZoom   { 0%,100%{transform:translate(-50%,-50%) scale(1)}         50%{transform:translate(-50%,-50%) scale(1.08)} }
+@keyframes textWave   { 0%{transform:translate(-50%,-50%) rotate(-2deg)}         50%{transform:translate(-50%,-50%) rotate(2deg)} 100%{transform:translate(-50%,-50%) rotate(-2deg)} }
+@keyframes textScroll { 0%{left:-100%; transform:translateY(-50%)}               100%{left:110%; transform:translateY(-50%)} }
+.anim-bounce { animation: textBounce 0.8s ease-in-out infinite; }
+.anim-shake  { animation: textShake  0.5s ease-in-out infinite; }
+.anim-zoom   { animation: textZoom   1.2s ease-in-out infinite; }
+.anim-wave   { animation: textWave   1s ease-in-out infinite; transform-origin: center; }
+.anim-scroll { animation: textScroll 4s linear infinite; }
+
 /* ─── GALLERY ────────────────────────────────────── */
 .page-header { text-align: center; padding: 48px 24px 28px; }
 .page-title {
-  font-family: var(--font-display); font-size: clamp(36px,6vw,72px);
-  letter-spacing: 2px;
+  font-family: var(--font-display); font-size: clamp(36px,6vw,72px); letter-spacing: 2px;
   background: linear-gradient(135deg, #fff 0%, var(--yellow) 60%, var(--red) 100%);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
 }
@@ -405,8 +460,7 @@ input[type="color"] { width: 26px; height: 26px; border-radius: 50%; border: non
 .filter-btn.active { background: var(--red); border-color: var(--red); color: #fff; }
 
 .gallery-grid {
-  max-width: 1300px; margin: 0 auto;
-  padding: 0 24px 80px;
+  max-width: 1300px; margin: 0 auto; padding: 0 24px 80px;
   display: grid; grid-template-columns: repeat(auto-fill,minmax(240px,1fr)); gap: 20px;
 }
 .gallery-empty { grid-column: 1/-1; text-align: center; padding: 80px 24px; color: var(--muted); }
@@ -414,7 +468,8 @@ input[type="color"] { width: 26px; height: 26px; border-radius: 50%; border: non
 
 .gallery-card {
   background: var(--card); border: 1px solid var(--border);
-  border-radius: 14px; overflow: hidden; transition: all 0.25s; cursor: pointer;
+  border-radius: 14px; overflow: hidden; transition: all 0.25s;
+  cursor: pointer; position: relative;
 }
 .gallery-card:hover { transform: translateY(-4px); border-color: rgba(255,255,255,0.18); box-shadow: 0 16px 40px rgba(0,0,0,0.4); }
 .gallery-card img { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; }
@@ -424,20 +479,15 @@ input[type="color"] { width: 26px; height: 26px; border-radius: 50%; border: non
 .gallery-card-actions { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; }
 .like-btn {
   background: none; border: none; color: var(--muted);
-  font-size: 13px; font-weight: 700; cursor: pointer;
-  padding: 4px 8px; border-radius: 6px;
-  transition: all 0.15s; display: flex; align-items: center; gap: 4px;
+  font-size: 13px; font-weight: 700; cursor: pointer; padding: 4px 8px;
+  border-radius: 6px; transition: all 0.15s; display: flex; align-items: center; gap: 4px;
   font-family: var(--font-body);
 }
 .like-btn:hover { color: var(--red); background: rgba(230,57,70,0.1); }
 .like-btn.liked { color: var(--red); }
-
-/* Mine badge */
 .mine-badge {
-  font-size: 10px; font-weight: 800; text-transform: uppercase;
-  letter-spacing: 0.5px; color: var(--teal);
-  background: rgba(6,214,160,0.12);
-  border-radius: 4px; padding: 2px 6px;
+  font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;
+  color: var(--teal); background: rgba(6,214,160,0.12); border-radius: 4px; padding: 2px 6px;
 }
 
 /* ─── LEADERBOARD ────────────────────────────────── */
@@ -461,23 +511,6 @@ input[type="color"] { width: 26px; height: 26px; border-radius: 50%; border: non
 .lb-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
 .lb-score { font-family: var(--font-mono); font-size: 18px; font-weight: 700; color: var(--teal); text-align: right; }
 
-/* ─── ANIM TEXT ──────────────────────────────────── */
-.anim-text-el {
-  position: absolute; font-weight: 900;
-  text-shadow: 3px 3px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
-  pointer-events: none; white-space: nowrap;
-}
-@keyframes textBounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
-@keyframes textShake  { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-6px)} 40%{transform:translateX(6px)} 60%{transform:translateX(-4px)} 80%{transform:translateX(4px)} }
-@keyframes textZoom   { 0%,100%{transform:scale(1)} 50%{transform:scale(1.08)} }
-@keyframes textWave   { 0%{transform:rotate(-2deg)} 50%{transform:rotate(2deg)} 100%{transform:rotate(-2deg)} }
-@keyframes textScroll { 0%{left:-100%} 100%{left:110%} }
-.anim-bounce { animation: textBounce 0.8s ease-in-out infinite; }
-.anim-shake  { animation: textShake  0.5s ease-in-out infinite; }
-.anim-zoom   { animation: textZoom   1.2s ease-in-out infinite; }
-.anim-wave   { animation: textWave   1s ease-in-out infinite; transform-origin: center; }
-.anim-scroll { animation: textScroll 4s linear infinite; left: -100%; top: 50%; }
-
 /* ─── TOAST ──────────────────────────────────────── */
 .toast {
   position: fixed; bottom: 32px; left: 50%;
@@ -489,54 +522,33 @@ input[type="color"] { width: 26px; height: 26px; border-radius: 50%; border: non
 }
 .toast.show { transform: translateX(-50%) translateY(0); }
 
-/* ─── TEXT DRAG / RESIZE HANDLES ────────────────── */
-.handle-layer {
+/* ─── DELETE ─────────────────────────────────────── */
+.delete-btn {
+  background: none; border: none; font-size: 15px; cursor: pointer;
+  padding: 2px 5px; border-radius: 6px; opacity: 0.4; transition: opacity 0.2s; line-height: 1;
+}
+.delete-btn:hover { opacity: 1; }
+
+.delete-confirm {
   position: absolute; inset: 0;
-  pointer-events: none;  /* ← keep this, children override it */
-  z-index: 20;
+  background: rgba(14,14,22,0.93); backdrop-filter: blur(4px);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 10px; padding: 20px; border-radius: 14px;
+  animation: popIn 0.2s cubic-bezier(0.34,1.56,0.64,1); z-index: 10;
 }
-
-.text-handle-box {
-  position: absolute;
-  pointer-events: all;
-  cursor: grab;
-  border: 1.5px dashed rgba(255,255,255,0.25);
-  border-radius: 4px;
-  transition: border-color 0.15s;
-  box-sizing: border-box;
+.delete-confirm span { font-weight: 800; font-size: 15px; }
+.delete-confirm-yes {
+  background: var(--red); color: #fff; border: none; border-radius: 8px; padding: 9px 18px;
+  font-family: var(--font-body); font-weight: 800; font-size: 13px; cursor: pointer; width: 100%;
+  box-shadow: 0 4px 16px rgba(230,57,70,0.35);
 }
-.text-handle-box:hover {
-  border-color: rgba(255,214,10,0.6);
+.delete-confirm-yes:hover { background: #ff4d5a; }
+.delete-confirm-no {
+  background: transparent; color: var(--muted); border: 1.5px solid var(--border);
+  border-radius: 8px; padding: 8px 18px; font-family: var(--font-body);
+  font-weight: 700; font-size: 13px; cursor: pointer; width: 100%;
 }
-.text-handle-box.active {
-  border-color: var(--yellow);
-  box-shadow: 0 0 0 1px rgba(255,214,10,0.2);
-}
-
-/* Corner resize handles */
-.resize-handle {
-  position: absolute;
-  width: 10px; height: 10px;
-  background: var(--yellow);
-  border: 2px solid var(--dark);
-  border-radius: 2px;
-  pointer-events: all;
-  z-index: 21;
-}
-.resize-nw { top: -5px;    left: -5px;    cursor: nw-resize; }
-.resize-ne { top: -5px;    right: -5px;   cursor: ne-resize; }
-.resize-sw { bottom: -5px; left: -5px;    cursor: sw-resize; }
-.resize-se { bottom: -5px; right: -5px;   cursor: se-resize; }
-
-/* Hide handles when box has no active class (dim on inactive) */
-.text-handle-box:not(.active) .resize-handle {
-  opacity: 0;
-  transition: opacity 0.15s;
-}
-.text-handle-box:hover .resize-handle,
-.text-handle-box.active .resize-handle {
-  opacity: 1;
-}
+.delete-confirm-no:hover { color: var(--text); }
 
 /* ─── UTILS ──────────────────────────────────────── */
 .hidden { display: none !important; }
